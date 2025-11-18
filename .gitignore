@@ -1,7 +1,26 @@
+# HTML отчеты
+*.html
+
+# Файлы окружения
 .env
-__pycache__/
+
+# Базы данных
 *.db
 *.sqlite
+*.sqlite3
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Логи
 *.log
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Виртуальные окружения
 venv/
-.venv
+env/

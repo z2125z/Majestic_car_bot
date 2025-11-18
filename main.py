@@ -4,7 +4,6 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from config.settings import settings
 from handlers.rental_handler import router as rental_router
-from handlers.stats_handler import router as stats_router
 from handlers.admin_handler import router as admin_router
 
 # Настройка логирования
@@ -18,7 +17,6 @@ async def main():
     
     # Регистрация роутеров
     dp.include_router(rental_router)
-    dp.include_router(stats_router)
     dp.include_router(admin_router)
     
     # Запуск бота
