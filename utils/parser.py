@@ -10,7 +10,7 @@ def parse_rental_message(text: str) -> Optional[Dict]:
         'character': r'Персонаж:\s*(.+)',
         'transport': r'Транспорт:\s*(.+)',
         'license_plate': r'Номер транспорта:\s*([A-Z0-9]+)',
-        'price': r'Цена:\s*\$(?:[\s]*)?([\d,]+)',
+        'price': r'Цена:\s*\$?\s*([\d\s,]+)',
         'duration': r'Длительность:\s*(.+)',
         'renter': r'Арендатор:\s*(.+)'
     }
@@ -22,9 +22,19 @@ def parse_rental_message(text: str) -> Optional[Dict]:
         if match:
             result[key] = match.group(1).strip()
     
-    # Преобразуем цену в число
+    # Преобразуем цену в число (исправляем проблему с пробелами)
     if 'price' in result:
-        result['price'] = float(result['price'].replace(',', ''))
+        # Убираем пробелы и запятые, затем преобразуем в число
+        price_cleaned = result['price'].replace(' ', '').replace(',', '')
+        try:
+            result['price'] = float(price_cleaned)
+        except ValueError:
+            # Если не удалось преобразовать, попробуем извлечь цифры
+            numbers = re.findall(r'\d+', result['price'])
+            if numbers:
+                result['price'] = float(''.join(numbers))
+            else:
+                result['price'] = 0
     
     # Проверяем, что все обязательные поля найдены
     required_fields = ['server', 'character', 'transport', 'license_plate', 'price', 'duration', 'renter']
